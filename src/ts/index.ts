@@ -25,9 +25,9 @@ import enableHoverClass from './hoverClass'
 /*
  * variables global to the plugin
  */
-let dragging
-let draggingHeight
-let draggingWidth
+let dragging:any
+let draggingHeight:any
+let draggingWidth:any
 
 /*
  * Keeps track of the initialy selected list, where 'dragstart' event was triggered
@@ -35,23 +35,23 @@ let draggingWidth
  */
 
 // Origin List - data from before any item was changed
-let originContainer
-let originIndex
-let originElementIndex
-let originItemsBeforeUpdate
+let originContainer:any
+let originIndex:any
+let originElementIndex:any
+let originItemsBeforeUpdate:any
 
 // Previous Sortable Container - we dispatch as sortenter event when a
 // dragged item enters a sortableContainer for the first time
-let previousContainer
+let previousContainer:any
 
 // Destination List - data from before any item was changed
-let destinationItemsBeforeUpdate
+let destinationItemsBeforeUpdate:any
 
 /**
  * remove event handlers from items
  * @param {Array|NodeList} items
  */
-const removeItemEvents = function (items) {
+const removeItemEvents = function (items:any) {
   off(items, 'dragstart')
   off(items, 'dragend')
   off(items, 'dragover')
@@ -61,19 +61,8 @@ const removeItemEvents = function (items) {
   off(items, 'mouseleave')
 }
 
-/**
- *
- * remove Store map values
- * @param {Array|NodeList} items
- */
-const removeStoreData = function (items) {
-  if (items instanceof Array) {
-    items.forEach(element => stores.delete(element))
-  }
-}
-
 // Remove container events
-const removeContainerEvents = function (originContainer, previousContainer) {
+const removeContainerEvents = function (originContainer:any, previousContainer:any) {
   if (originContainer) {
     off(originContainer, 'dragleave')
   }
@@ -89,7 +78,7 @@ const removeContainerEvents = function (originContainer, previousContainer) {
  * @param {HTMLElement} draggedItem - the item that the user drags
  * @param {HTMLElement} sortable a single sortable
  */
-const getDragging = function (draggedItem, sortable) {
+const getDragging = function (draggedItem:any, sortable:any) {
   let ditem = draggedItem
   if (store(sortable).getConfig('copy') === true) {
     ditem = draggedItem.cloneNode(true)
@@ -104,7 +93,7 @@ const getDragging = function (draggedItem, sortable) {
  * Remove data from sortable
  * @param {HTMLElement} sortable a single sortable
  */
-const removeSortableData = function (sortable) {
+const removeSortableData = function (sortable:any) {
   removeData(sortable)
   removeAttr(sortable, 'aria-dropeffect')
 }
@@ -112,7 +101,7 @@ const removeSortableData = function (sortable) {
  * Remove data from items
  * @param {Array<HTMLElement>|HTMLElement} items
  */
-const removeItemData = function (items) {
+const removeItemData = function (items:any) {
   removeAttr(items, 'aria-grabbed')
   removeAttr(items, 'aria-copied')
   removeAttr(items, 'draggable')
@@ -124,9 +113,9 @@ const removeItemData = function (items) {
  * @param {Event} event - the current event. We need to pass it to be able to
  * find Sortable whith shadowRoot (document fragment has no parent)
  */
-function findSortable (element, event) {
+function findSortable (element:any, event:any) {
   if (event.composedPath) {
-    return event.composedPath().find(el => el.isSortable)
+    return event.composedPath().find((el:any) => el.isSortable)
   }
   while (element.isSortable !== true) {
     element = element.parentElement
@@ -139,8 +128,9 @@ function findSortable (element, event) {
  * @param {HTMLElement} sortableElement a single sortable
  * @param {HTMLElement} element is that being dragged
  */
-function findDragElement (sortableElement, element) {
+function findDragElement (sortableElement:any, element:any) {
   const options = data(sortableElement, 'opts')
+  // @ts-expect-error
   const items = filter(sortableElement.children, options.items)
   const itemlist = items.filter(function (ele) {
     return ele.contains(element) || (ele.shadowRoot && ele.shadowRoot.contains(element))
@@ -152,9 +142,11 @@ function findDragElement (sortableElement, element) {
  * Destroy the sortable
  * @param {HTMLElement} sortableElement a single sortable
  */
-const destroySortable = function (sortableElement) {
+const destroySortable = function (sortableElement:sortable) {
   const opts = data(sortableElement, 'opts') || {}
+  // @ts-expect-error
   const items = filter(sortableElement.children, opts.items)
+  // @ts-expect-error
   const handles = getHandles(items, opts.handle)
   // disable adding hover class
   enableHoverClass(sortableElement, false)
@@ -170,8 +162,6 @@ const destroySortable = function (sortableElement) {
   off(handles, 'mousedown')
   removeItemEvents(items)
   removeItemData(items)
-  removeStoreData(items)
-  removeStoreData([sortableElement])
   removeContainerEvents(originContainer, previousContainer)
   // clear sortable flag
   sortableElement.isSortable = false
@@ -180,9 +170,11 @@ const destroySortable = function (sortableElement) {
  * Enable the sortable
  * @param {HTMLElement} sortableElement a single sortable
  */
-const enableSortable = function (sortableElement) {
+const enableSortable = function (sortableElement:sortable) {
   const opts = data(sortableElement, 'opts')
+  // @ts-expect-error
   const items = filter(sortableElement.children, opts.items)
+  // @ts-expect-error
   const handles = getHandles(items, opts.handle)
   attr(sortableElement, 'aria-dropeffect', 'move')
   data(sortableElement, '_disabled', 'false')
@@ -193,8 +185,10 @@ const enableSortable = function (sortableElement) {
   // IE FIX for ghost
   // can be disabled as it has the side effect that other events
   // (e.g. click) will be ignored
+  // @ts-expect-error
   if (opts.disableIEFix === false) {
     const spanEl = (document || window.document).createElement('span')
+    // @ts-expect-error
     if (typeof spanEl.dragDrop === 'function') {
       on(handles, 'mousedown', function () {
         if (items.indexOf(this) !== -1) {
@@ -214,9 +208,11 @@ const enableSortable = function (sortableElement) {
  * Disable the sortable
  * @param {HTMLElement} sortableElement a single sortable
  */
-const disableSortable = function (sortableElement) {
+const disableSortable = function (sortableElement:sortable) {
   const opts = data(sortableElement, 'opts')
+  // @ts-expect-error
   const items = filter(sortableElement.children, opts.items)
+  // @ts-expect-error
   const handles = getHandles(items, opts.handle)
   attr(sortableElement, 'aria-dropeffect', 'none')
   data(sortableElement, '_disabled', 'true')
@@ -229,9 +225,11 @@ const disableSortable = function (sortableElement) {
  * @param {HTMLElement} sortableElement a single sortable
  * @description events need to be removed to not be double bound
  */
-const reloadSortable = function (sortableElement) {
+const reloadSortable = function (sortableElement:sortable) {
   const opts = data(sortableElement, 'opts')
+  // @ts-expect-error
   const items = filter(sortableElement.children, opts.items)
+  // @ts-expect-error
   const handles = getHandles(items, opts.handle)
   data(sortableElement, '_disabled', 'false')
   // remove event handlers from items
@@ -243,13 +241,16 @@ const reloadSortable = function (sortableElement) {
   off(sortableElement, 'dragenter')
   off(sortableElement, 'drop')
 }
+//---------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------
 
 /**
  * Public sortable object
  * @param {Array|NodeList} sortableElements
  * @param {object|string} options|method
  */
-export default function sortable (sortableElements, options: configuration|object|string|undefined): sortable {
+export default function sortable (sortableElements:any, options: configuration|object|string|undefined): sortable {
   // get method string to see if a method is called
   const method = String(options)
   options = options || {}
@@ -267,11 +268,12 @@ export default function sortable (sortableElements, options: configuration|objec
   if (/serialize/.test(method)) {
     return sortableElements.map((sortableContainer) => {
       const opts = data(sortableContainer, 'opts')
+      // @ts-expect-error
       return serialize(sortableContainer, opts.itemSerializer, opts.containerSerializer)
     })
   }
 
-  sortableElements.forEach(function (sortableElement) {
+  sortableElements.forEach(function (sortableElement:any) {
     if (/enable|disable|destroy/.test(method)) {
       return sortable[method](sortableElement)
     }
@@ -284,6 +286,7 @@ export default function sortable (sortableElements, options: configuration|objec
     // merge options with default options
     options = Object.assign({}, defaultConfiguration, store(sortableElement).config, options)
     // init data store for sortable
+    // @ts-expect-error
     store(sortableElement).config = options
     // set options on sortable
     data(sortableElement, 'opts', options)
@@ -292,29 +295,38 @@ export default function sortable (sortableElements, options: configuration|objec
     // reset sortable
     reloadSortable(sortableElement)
     // initialize
+    // @ts-expect-error
     const listItems = filter(sortableElement.children, options.items)
     // create element if user defined a placeholder element as a string
     let customPlaceholder
+    // @ts-expect-error
     if (options.placeholder !== null && options.placeholder !== undefined) {
       const tempContainer = document.createElement(sortableElement.tagName)
+      // @ts-expect-error
       if (options.placeholder instanceof HTMLElement) {
+        // @ts-expect-error
         tempContainer.appendChild(options.placeholder)
       } else {
+        // @ts-expect-error
         tempContainer.innerHTML = options.placeholder
       }
       customPlaceholder = tempContainer.children[0]
     }
     // add placeholder
+    // @ts-expect-error
     store(sortableElement).placeholder = makePlaceholder(sortableElement, customPlaceholder, options.placeholderClass)
-
+    // @ts-expect-error
     data(sortableElement, 'items', options.items)
-
+    // @ts-expect-error
     if (options.acceptFrom) {
+      // @ts-expect-error
       data(sortableElement, 'acceptFrom', options.acceptFrom)
+      // @ts-expect-error
     } else if (options.connectWith) {
+      // @ts-expect-error
       data(sortableElement, 'connectWith', options.connectWith)
     }
-
+  
     enableSortable(sortableElement)
     attr(listItems, 'role', 'option')
     attr(listItems, 'aria-grabbed', 'false')
@@ -323,36 +335,40 @@ export default function sortable (sortableElements, options: configuration|objec
      Handle is set at the sortableElement level as it will bubble up
      from the item
      */
-    on(sortableElement, 'dragstart', function (e) {
+    // @ts-expect-error
+    on(sortableElement, 'dragstart', function (e:any) {
       // ignore dragstart events
       const target = getEventTarget(e)
+      // @ts-expect-error
       if (target.isSortable === true) {
         return
       }
       e.stopImmediatePropagation()
-
+      // @ts-expect-error
       if ((options.handle && !target.matches(options.handle)) || target.getAttribute('draggable') === 'false') {
         return
       }
-
+  
       const sortableContainer = findSortable(target, e)
       const dragItem = findDragElement(sortableContainer, target)
-
+  
       // grab values
+      // @ts-expect-error
       originItemsBeforeUpdate = filter(sortableContainer.children, options.items)
       originIndex = originItemsBeforeUpdate.indexOf(dragItem)
       originElementIndex = getIndex(dragItem, sortableContainer.children)
       originContainer = sortableContainer
-
+      // @ts-expect-error
       // add transparent clone or other ghost to cursor
       setDragImage(e, dragItem, options.customDragImage)
       // cache selsection & add attr for dragging
       draggingHeight = getElementHeight(dragItem)
       draggingWidth = getElementWidth(dragItem)
+      // @ts-expect-error
       dragItem.classList.add(options.draggingClass)
       dragging = getDragging(dragItem, sortableContainer)
       attr(dragging, 'aria-grabbed', 'true')
-
+  
       // dispatch sortstart event on each element in group
       sortableContainer.dispatchEvent(new CustomEvent('sortstart', {
         detail: {
@@ -362,23 +378,27 @@ export default function sortable (sortableElements, options: configuration|objec
             container: originContainer
           },
           item: dragging,
-          originalTarget: target
+          originalTarget: target,
+          dragEvent:e
         }
       }))
     })
-
+  
     /*
      We are capturing targetSortable before modifications with 'dragenter' event
     */
-    on(sortableElement, 'dragenter', (e) => {
+   // @ts-expect-error
+    on(sortableElement, 'dragenter', (e:any) => {
       const target = getEventTarget(e)
       const sortableContainer = findSortable(target, e)
-
+  
       if (sortableContainer && sortableContainer !== previousContainer) {
+        // @ts-expect-error
         destinationItemsBeforeUpdate = filter(sortableContainer.children, data(sortableContainer, 'items'))
           .filter(item => item !== store(sortableElement).placeholder)
-
+        // @ts-expect-error
         if (options.dropTargetContainerClass) {
+          // @ts-expect-error
           sortableContainer.classList.add(options.dropTargetContainerClass)
         }
         sortableContainer.dispatchEvent(new CustomEvent('sortenter', {
@@ -396,13 +416,15 @@ export default function sortable (sortableElements, options: configuration|objec
             originalTarget: target
           }
         }))
-
-        on(sortableContainer, 'dragleave', e => {
+        //@ts-ignore
+        on(sortableContainer, 'dragleave', function (e:any) {
           // TODO: rename outTarget to be more self-explanatory
           // e.fromElement for very old browsers, similar to relatedTarget
           const outTarget = e.relatedTarget || e.fromElement
           if (!e.currentTarget.contains(outTarget)) {
+            // @ts-expect-error
             if (options.dropTargetContainerClass) {
+              // @ts-expect-error
               sortableContainer.classList.remove(options.dropTargetContainerClass)
             }
             sortableContainer.dispatchEvent(new CustomEvent('sortleave', {
@@ -421,20 +443,21 @@ export default function sortable (sortableElements, options: configuration|objec
       }
       previousContainer = sortableContainer
     })
-
+  
     /*
      * Dragend Event - https://developer.mozilla.org/en-US/docs/Web/Events/dragend
      * Fires each time dragEvent end, or ESC pressed
      * We are using it to clean up any draggable elements and placeholders
      */
-    on(sortableElement, 'dragend', function (e) {
+    // @ts-expect-error
+    on(sortableElement, 'dragend', function (e:any) {
       if (!dragging) {
         return
       }
-
+      // @ts-expect-error
       dragging.classList.remove(options.draggingClass)
       attr(dragging, 'aria-grabbed', 'false')
-
+  
       if (dragging.getAttribute('aria-copied') === 'true' && data(dragging, 'dropped') !== 'true') {
         dragging.remove()
       }
@@ -445,11 +468,11 @@ export default function sortable (sortableElements, options: configuration|objec
       const visiblePlaceholder = Array.from(stores.values()).map(data => data.placeholder)
         .filter(placeholder => placeholder instanceof HTMLElement)
         .filter(isInDom)[0]
-
+  
       if (visiblePlaceholder) {
         visiblePlaceholder.remove()
       }
-
+  
       // dispatch sortstart event on each element in group
       sortableElement.dispatchEvent(new CustomEvent('sortstop', {
         detail: {
@@ -458,27 +481,29 @@ export default function sortable (sortableElements, options: configuration|objec
             index: originIndex,
             container: originContainer
           },
-          item: dragging
+          item: dragging,
+          dragEvent:e
         }
       }))
-
+  
       previousContainer = null
       dragging = null
       draggingHeight = null
       draggingWidth = null
     })
-
+  
     /*
      * Drop Event - https://developer.mozilla.org/en-US/docs/Web/Events/drop
      * Fires when valid drop target area is hit
      */
-    on(sortableElement, 'drop', function (e) {
+    // @ts-expect-error
+    on(sortableElement, 'drop', function (e:any) {
       if (!listsConnected(sortableElement, dragging.parentElement)) {
         return
       }
       e.preventDefault()
       e.stopPropagation()
-
+  
       data(dragging, 'dropped', 'true')
       // get the one placeholder that is currently visible
       const visiblePlaceholder = Array.from(stores.values()).map((data) => {
@@ -500,6 +525,23 @@ export default function sortable (sortableElements, options: configuration|objec
         data(dragging, 'dropped', 'false')
         return
       }
+      const placeholder = store(sortableElement).placeholder
+      // @ts-expect-error
+      const originItems = filter(originContainer.children, options.items)
+        .filter(item => item !== placeholder)
+      const destinationContainer = this.isSortable === true ? this : this.parentElement
+      // @ts-expect-error
+      const destinationItems = filter(destinationContainer.children, data(destinationContainer, 'items'))
+        .filter(item => item !== placeholder)
+        // @ts-expect-error
+      const destinationElementIndex = getIndex(dragging, Array.from(dragging.parentElement.children)
+        .filter(item => item !== placeholder))
+      const destinationIndex = getIndex(dragging, destinationItems)
+      // @ts-expect-error
+      if (options.dropTargetContainerClass) {
+        // @ts-expect-error
+        destinationContainer.classList.remove(options.dropTargetContainerClass)
+      }
       /*
        * Fires Custom Event - 'sortstop'
        */
@@ -510,24 +552,20 @@ export default function sortable (sortableElements, options: configuration|objec
             index: originIndex,
             container: originContainer
           },
-          item: dragging
+          item: dragging,
+          destination: {
+            index: destinationIndex,
+            elementIndex: destinationElementIndex,
+            container: destinationContainer,
+            itemsBeforeUpdate: destinationItemsBeforeUpdate,
+            items: destinationItems
+          },
+          dragEvent:e
         }
       }))
-
-      const placeholder = store(sortableElement).placeholder
-      const originItems = filter(originContainer.children, options.items)
-        .filter(item => item !== placeholder)
-      const destinationContainer = this.isSortable === true ? this : this.parentElement
-      const destinationItems = filter(destinationContainer.children, data(destinationContainer, 'items'))
-        .filter(item => item !== placeholder)
-      const destinationElementIndex = getIndex(dragging, Array.from(dragging.parentElement.children)
-        .filter(item => item !== placeholder))
-      const destinationIndex = getIndex(dragging, destinationItems)
-
-      if (options.dropTargetContainerClass) {
-        destinationContainer.classList.remove(options.dropTargetContainerClass)
-      }
-
+  
+     
+  
       /*
        * When a list item changed container lists or index within a list
        * Fires Custom Event - 'sortupdate'
@@ -549,17 +587,18 @@ export default function sortable (sortableElements, options: configuration|objec
               itemsBeforeUpdate: destinationItemsBeforeUpdate,
               items: destinationItems
             },
-            item: dragging
+            item: dragging,
+            dragEvent:e
           }
         }))
       }
     })
-
-    const debouncedDragOverEnter = debounce((sortableElement, element, pageX, pageY) => {
+  
+    const debouncedDragOverEnter = debounce((sortableElement:any, element:any, pageX:any, pageY:any) => {
       if (!dragging) {
         return
       }
-
+      // @ts-expect-error
       // set placeholder height if forcePlaceholderSize option is set
       if (options.forcePlaceholderSize) {
         store(sortableElement).placeholder.style.height = draggingHeight + 'px'
@@ -579,22 +618,27 @@ export default function sortable (sortableElements, options: configuration|objec
           const deadZoneHorizontal = thisWidth - draggingWidth
           const offsetTop = offset(element).top
           const offsetLeft = offset(element).left
+          
           if (placeholderIndex < thisIndex &&
+            // @ts-expect-error
               ((options.orientation === 'vertical' && pageY < offsetTop) ||
+              // @ts-expect-error
                   (options.orientation === 'horizontal' && pageX < offsetLeft))) {
             return
           }
           if (placeholderIndex > thisIndex &&
+            // @ts-expect-error
               ((options.orientation === 'vertical' && pageY > offsetTop + thisHeight - deadZoneVertical) ||
+              // @ts-expect-error
                   (options.orientation === 'horizontal' && pageX > offsetLeft + thisWidth - deadZoneHorizontal))) {
             return
           }
         }
-
+  
         if (dragging.oldDisplay === undefined) {
           dragging.oldDisplay = dragging.style.display
         }
-
+  
         if (dragging.style.display !== 'none') {
           dragging.style.display = 'none'
         }
@@ -605,12 +649,14 @@ export default function sortable (sortableElements, options: configuration|objec
         try {
           const elementMiddleVertical = offset(element).top + element.offsetHeight / 2
           const elementMiddleHorizontal = offset(element).left + element.offsetWidth / 2
+          // @ts-expect-error
           placeAfter = (options.orientation === 'vertical' && (pageY >= elementMiddleVertical)) ||
+          // @ts-expect-error
               (options.orientation === 'horizontal' && (pageX >= elementMiddleHorizontal))
         } catch (e) {
           placeAfter = placeholderIndex < thisIndex
         }
-
+  
         if (placeAfter) {
           after(element, store(sortableElement).placeholder)
         } else {
@@ -634,14 +680,17 @@ export default function sortable (sortableElements, options: configuration|objec
             return data.placeholder
           })
         // check if element is not in placeholders
+        // @ts-expect-error
         if (placeholders.indexOf(element) === -1 && sortableElement === element && !filter(element.children, options.items).length) {
           placeholders.forEach((element) => element.remove())
           element.appendChild(store(sortableElement).placeholder)
         }
       }
-    }, options.debounce)
+    }, 
+    // @ts-expect-error
+    options.debounce)
     // Handle dragover and dragenter events on draggable items
-    const onDragOverEnter = function (e) {
+    const onDragOverEnter = function (e:any) {
       let element = e.target
       const sortableElement = element.isSortable === true ? element : findSortable(element, e)
       element = findDragElement(sortableElement, element)
@@ -649,6 +698,7 @@ export default function sortable (sortableElements, options: configuration|objec
         return
       }
       const options = data(sortableElement, 'opts')
+      // @ts-expect-error
       if (parseInt(options.maxItems) && filter(sortableElement.children, data(sortableElement, 'items')).length >= parseInt(options.maxItems) && dragging.parentElement !== sortableElement) {
         return
       }
@@ -657,33 +707,34 @@ export default function sortable (sortableElements, options: configuration|objec
       e.dataTransfer.dropEffect = store(sortableElement).getConfig('copy') === true ? 'copy' : 'move'
       debouncedDragOverEnter(sortableElement, element, e.pageX, e.pageY)
     }
-
+    // @ts-expect-error
     on(listItems.concat(sortableElement), 'dragover', onDragOverEnter)
+    // @ts-expect-error
     on(listItems.concat(sortableElement), 'dragenter', onDragOverEnter)
   })
 
   return sortableElements
 }
 
-sortable.destroy = function (sortableElement) {
+sortable.destroy = function (sortableElement:any) {
   destroySortable(sortableElement)
 }
 
-sortable.enable = function (sortableElement) {
+sortable.enable = function (sortableElement:any) {
   enableSortable(sortableElement)
 }
 
-sortable.disable = function (sortableElement) {
+sortable.disable = function (sortableElement:any) {
   disableSortable(sortableElement)
 }
 
 /* START.TESTS_ONLY */
 sortable.__testing = {
   // add internal methods here for testing purposes
-  data,
-  removeItemEvents,
-  removeItemData,
-  removeSortableData,
-  removeContainerEvents
+  data: data,
+  removeItemEvents: removeItemEvents,
+  removeItemData: removeItemData,
+  removeSortableData: removeSortableData,
+  removeContainerEvents: removeContainerEvents
 }
 /* END.TESTS_ONLY */

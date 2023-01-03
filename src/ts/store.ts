@@ -16,6 +16,7 @@ export class Store implements StoreInterface {
    * @method config
    * @param {object} config object of configurations
    */
+  //@ts-ignore
   set config (config: configuration) {
     if (typeof config !== 'object') {
       throw new Error('You must provide a valid configuration object to the config setter.')
@@ -30,7 +31,7 @@ export class Store implements StoreInterface {
    * @method config
    * @return {object}
    */
-
+  //@ts-ignore
   get config (): configuration {
     // transform Map to object
     const config = {}
@@ -74,6 +75,7 @@ export class Store implements StoreInterface {
    * @method placeholder
    * @return {HTMLElement|null}
    */
+  //@ts-ignore
   get placeholder (): HTMLElement {
     return this._placeholder
   }
@@ -84,6 +86,7 @@ export class Store implements StoreInterface {
    * @param {HTMLElement} placeholder
    * @return {void}
    */
+  //@ts-ignore
   set placeholder (placeholder: HTMLElement) {
     if (!(placeholder instanceof HTMLElement) && placeholder !== null) {
       throw new Error('A placeholder must be an html element or null.')

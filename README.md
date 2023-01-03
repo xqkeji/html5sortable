@@ -1,107 +1,52 @@
-![html5sortable1](https://user-images.githubusercontent.com/42062381/90550349-1f023500-e190-11ea-9db0-f6d5ba5412a7.png)
+# xq-html5sortable
+使用原生 HTML5 拖放 API 的可排序列表和网格。VanillaJS sortable lists and grids using native HTML5 drag and drop API.
 
+## 项目说明
+原项目的作者：[Lukas Oppermann](https://github.com/lukasoppermann)
+[原项目源代码地址](https://github.com/lukasoppermann/html5sortable.git)
+[原项目演示地址](http://lukasoppermann.github.io/html5sortable/index.html)
 
+由于原项目拖动前和拖动后无法获取鼠标的位置，不能应用于树状结构的拖放，因此对其进行简单的修改，并使用 unbuild 进行重新构建。
 
+## 安装
 
-
-<h1> HTML5Sortable </h1>
-
-[![Build Status](https://github.com/lukasoppermann/html5sortable/workflows/Build%20and%20test/badge.svg)](https://github.com/lukasoppermann/html5sortable/actions) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md) [![Coverage Status](https://img.shields.io/coveralls/lukasoppermann/html5sortable/master.svg?style=flat-square)](https://coveralls.io/github/lukasoppermann/html5sortable) [![Known Vulnerabilities](https://snyk.io/test/github/lukasoppermann/html5sortable/badge.svg?style=flat-square)](https://snyk.io/test/github/lukasoppermann/html5sortable)  [![NPM](https://img.shields.io/npm/v/html5sortable.svg?style=flat-square)](https://www.npmjs.com/package/html5sortable) [![npm](https://img.shields.io/npm/dt/html5sortable.svg?style=flat-square)](https://www.npmjs.com/package/html5sortable) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md) [![Code of Conduct](https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
-
-> **Lightweight vanillajs micro-library for creating sortable lists and grids using native HTML5 drag and drop API.**
-
-
-
-# Table of Contents
-  * [Community maintained](#community-maintained)
-  * [Looking for Co-Maintainer](#looking-for-co-maintainer)
-  * [Features](#features)
-  * [Framework adapters](#framework-adapters)
-  * [Installation](#installation)
-  * [Examples](#examples)
-  * [Docs](#docs)
-    * [Usage](#usage)
-    * [Styling](#styling)
-    * [Nesting](#nesting)
-    * [Events](#events)
-    * [Options](#options)
-    * [Methods](#methods)
-    * [Sorting table rows](#sorting-table-rows)
-  * [Contributing](#contributing)
-  * [Polyfills](#polyfills-facing-towards-the-future-instead-of-the-past)
-  * [Touch Support](#touch-support)
-  * [Known Issues](#known-issues)
-      
-
-## Community maintained
-
-A fair **warning:** this repository is currently not being actively developed. It works pretty fine, but if you find any issues you will need to fix them yourself. I try to keep the dependencies up to date and will happily help you fix issues and merge PRs for bugfixes or new features. 
-
-## Looking for Co-Maintainer
-[![Looking for Co-Maintainer](https://img.shields.io/badge/looking%20for-co%E2%80%93maintainer-red.svg?style=flat-square)](https://twitter.com/lukasoppermann)
-
-If you are interested in actively helping with maintaining & improving this project please send me a message via twitter [@lukasoppermann](https://twitter.com/lukasoppermann) or email oppermann.lukas@gmail.com with a short text of what you would like to do on the project. This may be something small like sorting issues and helping with questions and small bugs (if you have little time or are not that experienced) or something big like tackling big features.
-
-## Features
-* Only 2KB (minified and gzipped).
-* Built using native HTML5 drag and drop API. No dependencies.
-* Supports both list and grid style layouts.
-* Supported Browsers: Current versions of all major browsers (Chrome, Firefox, Safari, Opera, Edge), [IE11+ (Polyfill required)](#polyfills-facing-towards-the-future-instead-of-the-past)
-* Available as ES6 Module, AMD, CommonJS and iffe with `sortable` global
-
-**Demo:** Check out the **[examples](http://lukasoppermann.github.io/html5sortable/index.html)**
-
-## Framework adapters
-If you would like to add an adapter to the list, please [create an issue](https://github.com/lukasoppermann/html5sortable/issues) with the link to your adapter.
-- **Polymer:** https://github.com/trofrigo/polymer-html5sortable
-
-## Installation
-We recommend installing the package via npm.
-
-```
-npm install html5sortable --save
+```bash
+npm i xq-html5sortable
 ```
 
-Once you install the package using `npm` or [downloading the latest release](https://github.com/lukasoppermann/html5sortable/releases/latest) (don't use the master branch), load file you need **from the `dist/` directory**, e.g. `dist/html.sortable.min.js` for the minified iife version.
+在代码中引入xq-confirm
 
-- **iffe** (loading file via script tag): `dist/html5sortable.js` or `dist/html5sortable.min.js`
-- **ES6 Module**: `dist/html5sortable.es.js`
-- **CommonJS Module**: `dist/html5sortable.cjs.js`
-- **AMD Module**: `dist/html5sortable.amd.js`
+```ts
 
-Still using **bower**? `bower install https://github.com/lukasoppermann/html5sortable.git`
+import sortable from 'xq-html5sortable';
 
-## Examples
-You can find the **[examples online](https://lukasoppermann.github.io/html5sortable/index.html)** or test locally. **Warning:** the online demo is just to show off the features and is most likely not up to date. Please study this readme file for the current way of implementing and using `html5sortable`.
+```
 
-## Docs
+## 使用
 
-
-### Usage
-
-Use `sortable` method to create a sortable list:
+使用 `sortable` 方法创建拖动排序列表:
 
 ``` javascript
 sortable('.sortable');
 ```
 
-### Styling
+### 样式
 
-Use `.sortable-placeholder` CSS selectors to change the styles of the placeholder. You may change the class by setting the `placeholderClass` option in the config object.
+使用 .sortable-placeholder CSS 选择器更改占位符的样式。 您可以通过在配置对象中设置 `placeholderClass` 选项来更改css类。
 
 ``` javascript
 sortable('.sortable', {
-  placeholderClass: 'my-placeholder fade'
+  placeholderClass: '占位符的css类'
 });
 ```
 
-### Nesting
-You can nest sortables inside each other. However, take care to add a wrapper around the items, a sortable-item can **not** at the same time be a `sortable`.
+### 嵌套
+您可以将 sortables 嵌套在彼此内部。 但是，请注意在项目周围添加一个包装器，一个可排序项目不能同时是一个 `sortable`。
 
 ```html
-<div class="list"><!-- Sortable -->
+<div class="list"><!-- 可排序 -->
   <div class="item"> Item 1
-    <div class="sublist"><!-- Nested Sortable; Wrapping container needed -->
+    <div class="sublist"><!-- 嵌套排序的容器 -->
       <div class="subitem">Subitem 1</div>
       <div class="subitem">Subitem 2</div>
     </div>
@@ -110,52 +55,50 @@ You can nest sortables inside each other. However, take care to add a wrapper ar
 </div>
 ```
 
-## Events
-NOTE: Events can be listened on any element from the group (when using `connectWith`), since the same event will be dispatched on all of them.
+## 事件
+注意：可以在组中的任何元素上侦听事件（使用 `connectWith` 时），因为将在所有元素上分派相同的事件。
 
 ### sortstart
 
-Use `sortstart` event if you want to do something when sorting starts:
+如果您想在拖动排序开始时执行某些操作，请使用 `sortstart` 事件：
 
 ``` javascript
 sortable('.sortable')[0].addEventListener('sortstart', function(e) {
-    /*
+   /*
+     当用户开始排序并且 DOM 位置尚未改变时触发此事件。
 
-    This event is triggered when the user starts sorting and the DOM position has not yet changed.
+     e.detail.item - {HTMLElement} 拖动元素
 
-    e.detail.item - {HTMLElement} dragged element
-
-    Origin Container Data
-    e.detail.origin.index - {Integer} Index of the element within Sortable Items Only
-    e.detail.origin.elementIndex - {Integer} Index of the element in all elements in the Sortable Container
-    e.detail.origin.container - {HTMLElement} Sortable Container that element was moved out of (or copied from)
-    */
+     始发容器数据
+     e.detail.origin.index - {Integer} 仅可排序项目中元素的索引
+     e.detail.origin.elementIndex - {Integer} 该元素在 Sortable Container 中所有元素的索引
+     e.detail.origin.container - {HTMLElement} 元素被移出（或从中复制）的可排序容器
+     */
 });
 ```
 
 ### sortstop
 
-Use the `sortstop` event if you want to do something when sorting stops:
+如果您想在拖动排序停止时执行某些操作，请使用 `sortstop` 事件：
 
 ``` javascript
 sortable('.sortable')[0].addEventListener('sortstop', function(e) {
     /*
+     当用户停止排序并且 DOM 位置还没有改变时触发该事件。
 
-    This event is triggered when the user stops sorting and the DOM position has not yet changed.
+     e.detail.item - {HTMLElement} 拖动元素
 
-    e.detail.item - {HTMLElement} dragged element
-
-    Origin Container Data
-    e.detail.origin.index - {Integer} Index of the element within Sortable Items Only
-    e.detail.origin.elementIndex - {Integer} Index of the element in all elements in the Sortable Container
-    e.detail.origin.container - {HTMLElement} Sortable Container that element was moved out of (or copied from)
-    */
+     始发容器数据
+     e.detail.origin.index - {Integer} 仅可排序项目中元素的索引
+     e.detail.origin.elementIndex - {Integer} 该元素在 Sortable Container 中所有元素的索引
+     e.detail.origin.container - {HTMLElement} 元素被移出（或从中复制）的可排序容器
+     */
 });
 ```
 
 ### sortupdate
 
-Use `sortupdate` event if you want to do something when the order changes (e.g. storing the new order):
+如果您想拖动排序元素位置更新时执行某些操作，请使用 sortupdate 事件：
 
 ``` javascript
 sortable('.sortable')[0].addEventListener('sortupdate', function(e) {
@@ -163,40 +106,39 @@ sortable('.sortable')[0].addEventListener('sortupdate', function(e) {
     console.log(e.detail);
 
     /*
-    This event is triggered when the user stopped sorting and the DOM position has changed.
+     当用户停止排序并且 DOM 位置发生变化时会触发此事件。
 
-    e.detail.item - {HTMLElement} dragged element
+     e.detail.item - {HTMLElement} 拖动元素
 
-    Origin Container Data
-    e.detail.origin.index - {Integer} Index of the element within Sortable Items Only
-    e.detail.origin.elementIndex - {Integer} Index of the element in all elements in the Sortable Container
-    e.detail.origin.container - {HTMLElement} Sortable Container that element was moved out of (or copied from)
-    e.detail.origin.itemsBeforeUpdate - {Array} Sortable Items before the move
-    e.detail.origin.items - {Array} Sortable Items after the move
+     始发容器数据
+     e.detail.origin.index - {Integer} 仅可排序项目中元素的索引
+     e.detail.origin.elementIndex - {Integer} 该元素在 Sortable Container 中所有元素的索引
+     e.detail.origin.container - {HTMLElement} 元素被移出（或从中复制）的可排序容器
+     e.detail.origin.itemsBeforeUpdate - {Array} 移动前的可排序项目
+     e.detail.origin.items - {Array} 移动后可排序的项目
 
-    Destination Container Data
-    e.detail.destination.index - {Integer} Index of the element within Sortable Items Only
-    e.detail.destination.elementIndex - {Integer} Index of the element in all elements in the Sortable Container
-    e.detail.destination.container - {HTMLElement} Sortable Container that element is moved into (or copied into)
-    e.detail.destination.itemsBeforeUpdate - {Array} Sortable Items before the move
-    e.detail.destination.items - {Array} Sortable Items after the move
-    */
+     目的地集装箱数据
+     e.detail.destination.index - {Integer} 仅可排序项目中元素的索引
+     e.detail.destination.elementIndex - {Integer} 该元素在 Sortable Container 中所有元素的索引
+     e.detail.destination.container - {HTMLElement} 元素移动到（或复制到）中的可排序容器
+     e.detail.destination.itemsBeforeUpdate - {Array} 移动前的可排序项目
+     e.detail.destination.items - {Array} 移动后可排序的项目
+     */
 });
 ```
 
 ### sortenter 
-
-Fired when a dragitem enters a sortable container. 
+如果您想在拖动元素进入可排序的容器时进行某些操作，请使用 sortenter 事件。 
 
 ### sortleave
 
-Fired when a dragitem leaves a sortable container. 
+如果您想在拖动元素离开可排序的容器时进行某些操作，请使用 sortenter 事件。 
 
 
-## Options
+## 配置
 
 ### items
-Use the `items` option to specify which items inside the element should be sortable:
+使用 `items` 选项指定元素内的哪些项目应该是可排序的：
 
 ``` javascript
 sortable('.sortable', {
@@ -204,7 +146,7 @@ sortable('.sortable', {
 });
 ```
 ### handle
-Use the `handle` option to restrict drag start to the specified element:
+使用 `handle` 选项将拖动开始限制到指定的元素：
 
 ``` javascript
 sortable('.sortable', {
@@ -212,40 +154,29 @@ sortable('.sortable', {
 });
 ```
 ### forcePlaceholderSize
-Setting the `forcePlaceholderSize` option to true, forces the placeholder to have a height:
+将 `forcePlaceholderSize` 选项设置为 true，强制占位符具有高度：
 
 ``` javascript
 sortable('.sortable', {
     forcePlaceholderSize: true
 });
 ```
-
-### connectWith ![deprecated](https://img.shields.io/badge/feature-deprecated-yellow.svg?longCache=true&style=flat-square)
-**Use [`acceptFrom`](#acceptFrom) instead.** The `connectWith` option allows you to create a connected lists:
-
-``` javascript
-sortable('.js-sortable, .js-second-sortable', {
-    connectWith: 'connected' // unique string, which is not used for other connectWith sortables
-});
-```
-
 ### acceptFrom
-Use the `acceptFrom` option to restrict which sortable's items will be accepted by this sortable. `acceptFrom` accepts a comma separated list of selectors or `false` to disabling accepting items. This is an alternative to the now **deprecated** [connectWith](#connectwith) and should not be used together.
+使用 `acceptFrom` 选项来限制可排序项将被该可排序项接受。 `acceptFrom` 接受逗号分隔的选择器列表或 `false` 以禁用接受项目。 
 
 ``` javascript
 sortable('.sortable', {
   acceptFrom: '.sortable, .anotherSortable' // Defaults to null
 });
 ```
+***注意：*** 使用 `acceptFrom` 也会影响 sortable 本身。 这意味着，如果您不将其包含在 `acceptFrom` 选项中，项目将无法在列表本身中排序。
 
-***Note:*** Using `acceptFrom` also effects the sortable itself. This means, items will not be sortable within the list itself, if you do not include it in the `acceptFrom` option. 
+在示例中，当前列表 .sortable 允许对其中的项目进行排序，并接受来自 .anotherSortable 的元素。
 
-In the example the current list `.sortable` allows items within it to be sorted and accepts elements from `.anotherSortable`.
-
-If you want to be able to move items between to sortables, the `acceptFrom` option must be present on both of them.
+如果您希望能够在可排序项之间移动项目，则两者都必须存在 `acceptFrom` 选项。
 
 ### placeholder
-Use the `placeholder` option to specify the markup of the placeholder:
+使用 `placeholder` 选项指定占位符的标记：
 
 ``` javascript
 sortable('.sortable', {
@@ -255,7 +186,7 @@ sortable('.sortable', {
 ```
 
 ### hoverClass
-Use the `hoverClass` option to apply css classes to the hovered element rather than relying on `:hover`. This can eliminate some potential drag and drop issues where another element thinks it is being hovered over. Disabled when disabling or destroying sortable element.
+使用 `hoverClass` 选项将 css 类应用于悬停元素，而不是依赖于 `:hover`。 这可以消除一些潜在的拖放问题，即另一个元素认为它正在悬停。 禁用或销毁可排序元素时禁用。
 
 ``` javascript
 sortable('.sortable', {
@@ -264,8 +195,7 @@ sortable('.sortable', {
 ```
 
 ### dropTargetContainerClass
-Use `dropTargetContainerClass` option to apply a css Class to the container. The class is added when dragged item enters the container and removed when it leaves it (or is dropped).
-
+使用 `dropTargetContainerClass` 选项将 css 类应用于容器。 当拖动的项目进入容器时添加该类，并在它离开（或放下）时删除。
 ``` javascript
 sortable('.sortable', {
   dropTargetContainerClass: 'is-drop-target' // Defaults to false
@@ -273,15 +203,14 @@ sortable('.sortable', {
 ```
 
 ### maxItems
-Use the `maxItems` option to restrict the number of items that can be added to a sortable from a [connected](#connectwith) sortable. `maxItems` should always be combined with the `items` option. Make sure `items` does not match placeholder and other options, so that they are not counted.
-
+使用 `maxItems` 选项限制 sortable 的项目数。 `maxItems` 应始终与 `items` 选项结合使用。 确保 `items` 不匹配占位符和其他选项，这样它们就不会被计算在内。
 ``` javascript
 sortable('.sortable', {
   maxItems: 3 // Defaults to 0 (no limit)
 });
 ```
 ### copy
-Use the `copy` option to duplicate the element on drag. The original element will remain in the same position.
+使用“复制”选项在拖动时复制元素。 原始元素将保留在相同位置。
 
 ``` javascript
 sortable('.sortable', {
@@ -290,7 +219,8 @@ sortable('.sortable', {
 ```
 
 ### orientation
-Use the `orientation` option to specify the orientation of your list and fix incorrect hover behaviour. Defaults to `'vertical'`.
+使用 `orientation` 选项指定列表的方向并修复不正确的悬停行为。 默认为“vertical”。
+horizontal为水平，vertical垂直
 
 ``` javascript
 sortable('.sortable', {
@@ -299,7 +229,7 @@ sortable('.sortable', {
 ```
 
 ### itemSerializer
-You can provide a `function` that will be applied to every item in the `items` array ([see serialize](#serialize)). The function receives two arguments: `serializedItem: object`, `sortableContainer: Element`. This function can be used to change the output for the items. Defaults to `undefined`.
+您可以提供一个将应用于“项目”数组中的每个项目的“功能”（[参见序列化]（#serialize））。 该函数接收两个参数：`serializedItem: object`、`sortableContainer: Element`。 此函数可用于更改项目的输出。 默认为“未定义”。
 
 ``` javascript
 sortable('.sortable', {
@@ -313,7 +243,7 @@ sortable('.sortable', {
 ```
 
 ### containerSerializer
-You can provide a `function` that will be applied to the `container` object ([see serialize](#serialize)). The function receives one argument: `serializedContainer: object`. This function can be used to change the output for the container. Defaults to `undefined`.
+您可以提供将应用于“容器”对象的“函数”（[参见序列化](#serialize)）。 该函数接收一个参数：`serializedContainer: object`。 此函数可用于更改容器的输出。 默认为“未定义”。
 
 ``` javascript
 sortable('.sortable', {
@@ -326,9 +256,9 @@ sortable('.sortable', {
 ```
 
 ### customDragImage
-You can provide a function as a `customDragImage` property on the options object which will be used to create the item and position of the drag image (the half transparent item you see when dragging an element).
+您可以在选项对象上提供一个函数作为 `customDragImage` 属性，该对象将用于创建拖动图像的项目和位置（拖动元素时您看到的半透明项目）。
 
-The function gets three parameters, the dragged element, an offset object with the offset values for the offset of the item and the `dragstart` event. The function **MUST** return an object with an `element` property with an html element as well as a `posX` and `posY` property with has the x and y offset for the dragImage.
+该函数获取三个参数，被拖动的元素，一个具有项目偏移量的偏移量对象和“dragstart”事件。 函数**必须**返回一个对象，该对象具有 `element` 属性和 html 元素以及 `posX` 和 `posY` 属性，具有 dragImage 的 x 和 y 偏移量。
 
 ``` javascript
 sortable('.sortable', {
@@ -350,31 +280,31 @@ sortable('.sortable', {
 }
 ```
 
-## Methods
+## 方法
 
 ### destroy
-To remove the sortable functionality completely:
+要完全删除可排序功能：
 
 ``` javascript
 sortable('.sortable', 'destroy');
 ```
 
 ### disable
-To disable the sortable temporarily:
+暂时禁用可排序：
 
 ``` javascript
 sortable('.sortable', 'disable');
 ```
 
 ### enable
-To enable a disabled sortable:
+要启用可排序：
 
 ``` javascript
 sortable('.sortable', 'enable');
 ```
 
 ### serialize
-You can easily serialize a sortable using the `serialize` command. If you provided an [`itemSerializer`](#itemSerializer) or [`containerSerializer`](#containerSerializer) function in the options object, they will be applied to the `container` object and the `items` objects before they are returned.
+您可以使用 `serialize` 命令轻松序列化可排序对象。 如果您在选项对象中提供了 [`itemSerializer`](#itemSerializer) 或 [`containerSerializer`](#containerSerializer) 函数，它们将在返回之前应用于 `container` 对象和 `items` 对象。
 
 ``` javascript
 sortable('.sortable', 'serialize');
@@ -395,51 +325,14 @@ sortable('.sortable', 'serialize');
 ```
 
 ### reload
-When you add a new item to a sortable, it will not automatically be a draggable item, so you will need to reinit the sortable. Your previously added options will be preserved.
-
+当您向 sortable 添加新项目时，它不会自动成为可拖动项目，因此您需要重新初始化 sortable。 您之前添加的选项将被保留。
 ``` javascript
 sortable('.sortable');
 ```
 
-## Sorting table rows
+## html表格排序
 
- * Initialize plugin on `tbody` element (browsers automatically add `tbody` if you don't)
- * Keep in mind that different browsers may display different drag images of the row during the drag action. Webkit browsers seem to hide entire contents of `td` cell if there are any inline elements inside the `td`. This may or may not be fixed by setting the `td` to be `position: relative;`
- * If you add a custom `placeholder` you must use a `tr` e.g. `placeholder: "<tr><td colspan="3">The row will appear here</td></tr>"`, otherwise you will only be able to drop items when hovering the first column.
+* 在 `tbody` 元素上初始化插件（如果您不这样做，浏览器会自动添加 `tbody`）
+* 请记住，不同的浏览器可能会在拖动操作期间显示不同的行拖动图像。 如果 `td` 中有任何内联元素，Webkit 浏览器似乎会隐藏 `td` 单元格的全部内容。 这可能会也可能不会通过将 `td` 设置为 `position: relative;` 来解决。
+* 如果您添加自定义的“占位符”，您必须使用“tr”，例如 `placeholder: "<tr><td colspan="3">该行将出现在这里</td></tr>"`，否则您只能在悬停第一列时放下项目。
 
-## Contributing
-This version is maintained by [Lukas Oppermann](https://github.com/lukasoppermann) and [many other contributors](../../contributors). Thanks for your help! :+1:
-
-Contributions are always welcome. Please check out the [contribution guidelines](CONTRIBUTING.md) to make it fast & easy for us to merge your PR.
-
-**Issues:** If you create a [bug report](https://github.com/lukasoppermann/html5sortable/issues/new/choose), please make sure to include a [test case](https://codepen.io/pen/?template=GRoQRxo) showing the issue. The easiest way is to copy the [codepen template](https://codepen.io/pen/?template=GRoQRxo).
-
-## Polyfills: Facing towards the future instead of the past
-This project is focusing on modern, evergreen browsers to deliver a fast and small package. While many projects try build features so that it runs in the oldest browser (looking at you IE9), we try to create a fast and pleasant development experience using the language capabilities that the current version of Javascript offers.
-
-### Benefits
-#### Small and fast package for modern browsers
-While a backwards facing approach penalises modern browsers by making them download huge files, we prefer to ship a small package and have outdated browser bear the penalty of the polyfill. An additional benefit is that you might polyfill those features in any case so you don't have any additional load.
-
-#### Contribution friendly code base
-We try to encourage people to help shape the future of this package and contribute in small or big ways. By removing hard to understand hacks we make it easier for people new to the code base or even Javascript to contribute.
-
-#### Helps browser optimisation
-Browser try to performance optimise language features as much as possible. Working around the language to make code work in outdated browser may actually work against this.
-
-### Polyfill
-We recommend using the [Financial Times Polyfill Service](https://github.com/Financial-Times/polyfill-service) which will polyfill only the necessary features for browsers that need a polyfill. It is basically a no-config, easy solution.
-```
-<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-```
-
-### Touch Support
-Touch support can be achieved by using the [DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) polyfill.
-The DragDropTouch polyfill must be included before html5sortable is initialized.
-
-## Known Issues
-### Firefox
-- **Dragstart not working on buttons**  
-Dragstart event does not fire on `button` elements. This effectively disables drag and drop for button elements. See https://caniuse.com/#feat=dragndrop in the known issues section.
-- **Drag & Drop is not working on iOS**  
-But works in conjunction with [DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) [#522](https://github.com/lukasoppermann/html5sortable/issues/522).

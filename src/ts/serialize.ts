@@ -10,6 +10,7 @@ import getIndex from './getIndex'
  */
 export default (sortableContainer: HTMLElement, customItemSerializer: Function = (serializedItem: serializedItem, sortableContainer: HTMLElement) => serializedItem, customContainerSerializer: Function = (serializedContainer: object) => serializedContainer): object => {
   // check for valid sortableContainer
+  //@ts-ignore
   if (!(sortableContainer instanceof HTMLElement) || !sortableContainer.isSortable === true) {
     throw new Error('You need to provide a sortableContainer to be serialized.')
   }
@@ -19,7 +20,7 @@ export default (sortableContainer: HTMLElement, customItemSerializer: Function =
   }
   // get options
   const options = addData(sortableContainer, 'opts')
-
+  //@ts-ignore
   const item: string|undefined = options.items
 
   // serialize container

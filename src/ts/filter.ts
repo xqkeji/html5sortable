@@ -10,8 +10,9 @@ export default (nodes: NodeList|HTMLCollection|Array<HTMLElement>, selector: str
     throw new Error('You must provide a nodeList/HTMLCollection/Array of elements to be filtered.')
   }
   if (typeof selector !== 'string') {
+    //@ts-ignore
     return Array.from(nodes)
   }
-
+  //@ts-ignore
   return Array.from(nodes).filter((item) => item.nodeType === 1 && item.matches(selector))
 }
