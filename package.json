@@ -1,5 +1,15 @@
 {
   "name": "xq-html5sortable",
+  "version": "1.0.2",
+  "license": "MIT",
+  "description": "使用原生 HTML5 拖放 API 的可排序列表和网格。VanillaJS sortable lists and grids using native HTML5 drag and drop API.",
+  "author": "xqkeji.cn",
+  "homepage": "https://xqkeji.cn/",
+  "keywords": [
+    "sortable",
+    "html5",
+    "drag and drop"
+  ],
   "main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
@@ -10,16 +20,11 @@
 			"require": "./dist/index.cjs"
 		}
 	},
-  "version": "1.0.1",
-  "license": "MIT",
-  "description": "使用原生 HTML5 拖放 API 的可排序列表和网格。VanillaJS sortable lists and grids using native HTML5 drag and drop API.",
-  "author": "xqkeji.cn",
-  "homepage": "https://xqkeji.cn/",
-  "keywords": [
-    "sortable",
-    "html5",
-    "drag and drop"
-  ],
+  "scripts": {
+    "build": "npx unbuild && npm run convert && npm run min && npx xq-banner",
+    "convert":"rollup ./dist/index.cjs --format iife --file ./dist/xq-html5sortable.js",
+    "min":"uglifyjs ./dist/xq-html5sortable.js -m -o ./dist/xq-html5sortable.min.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/xqkeji/xq-html5sortable.git"
@@ -31,11 +36,9 @@
 		"@types/node": "^18.11.18",
 		"ts-node": "^10.9.1",
 		"typescript": "^4.9.4",
+    "uglify-js": "^3.17.4",
 		"unbuild": "^1.0.2",
     "vite": "^4.0.3",
     "xq-banner": "^1.0.7"
-	},
-  "scripts": {
-    "build": "npx unbuild && rollup ./dist/index.cjs --format iife --file ./dist/xq-html5sortable.js && npx xq-banner"
-  }
+	}
 }
