@@ -1,6 +1,6 @@
 {
   "name": "xq-html5sortable",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "description": "使用原生 HTML5 拖放 API 的可排序列表和网格。VanillaJS sortable lists and grids using native HTML5 drag and drop API.",
   "author": "xqkeji.cn",
@@ -10,6 +10,9 @@
     "html5",
     "drag and drop"
   ],
+  "files": [
+		"dist"
+	],
   "main": "./dist/index.mjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
