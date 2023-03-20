@@ -1,5 +1,5 @@
 /*!
- * xq-html5sortable v1.0.2 (https://xqkeji.cn/)
+ * xq-html5sortable v1.0.3 (https://xqkeji.cn/)
  * Author xqkeji.cn
  * LICENSE MIT
  * Copyright 2023 xqkeji.cn

@@ -25,8 +25,8 @@
 	},
   "scripts": {
     "build": "npx unbuild && npm run convert && npm run min && npx xq-banner",
-    "convert":"rollup ./dist/index.cjs --format iife --file ./dist/xq-html5sortable.js",
-    "min":"uglifyjs ./dist/xq-html5sortable.js -m -o ./dist/xq-html5sortable.min.js"
+    "convert":"esbuild ./src/ts/index.ts --outfile=./dist/js/xq-html5sortable.js --bundle",
+    "min":"uglifyjs ./dist/js/xq-html5sortable.js -m -o ./dist/js/xq-html5sortable.min.js"
   },
   "repository": {
     "type": "git",

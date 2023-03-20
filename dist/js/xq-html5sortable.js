@@ -1,12 +1,6 @@
-/*!
- * xq-html5sortable v1.0.2 (https://xqkeji.cn/)
- * Author xqkeji.cn
- * LICENSE MIT
- * Copyright 2023 xqkeji.cn
- */
- (function () {
-  'use strict';
-
+"use strict";
+(() => {
+  // src/ts/data.ts
   function addData(element, key, value) {
     if (value === void 0) {
       return element && element.h5s && element.h5s.data && element.h5s.data[key];
@@ -22,7 +16,8 @@
     }
   }
 
-  const filter = (nodes, selector) => {
+  // src/ts/filter.ts
+  var filter_default = (nodes, selector) => {
     if (!(nodes instanceof NodeList || nodes instanceof HTMLCollection || nodes instanceof Array)) {
       throw new Error("You must provide a nodeList/HTMLCollection/Array of elements to be filtered.");
     }
@@ -32,13 +27,12 @@
     return Array.from(nodes).filter((item) => item.nodeType === 1 && item.matches(selector));
   };
 
-  const stores = /* @__PURE__ */ new Map();
-  class Store {
-    constructor() {
-      this._config = /* @__PURE__ */ new Map();
-      this._placeholder = void 0;
-      this._data = /* @__PURE__ */ new Map();
-    }
+  // src/ts/store.ts
+  var stores = /* @__PURE__ */ new Map();
+  var Store = class {
+    _config = /* @__PURE__ */ new Map();
+    _placeholder = void 0;
+    _data = /* @__PURE__ */ new Map();
     set config(config) {
       if (typeof config !== "object") {
         throw new Error("You must provide a valid configuration object to the config setter.");
@@ -92,8 +86,8 @@
       }
       return this._data.delete(key);
     }
-  }
-  const store = (sortableElement) => {
+  };
+  var store_default = (sortableElement) => {
     if (!(sortableElement instanceof HTMLElement)) {
       throw new Error("Please provide a sortable to the store function.");
     }
@@ -103,6 +97,7 @@
     return stores.get(sortableElement);
   };
 
+  // src/ts/eventListener.ts
   function addEventListener(element, eventName, callback) {
     if (element instanceof Array) {
       for (let i = 0; i < element.length; ++i) {
@@ -111,7 +106,7 @@
       return;
     }
     element.addEventListener(eventName, callback);
-    store(element).setData(`event${eventName}`, callback);
+    store_default(element).setData(`event${eventName}`, callback);
   }
   function removeEventListener(element, eventName) {
     if (element instanceof Array) {
@@ -120,10 +115,11 @@
       }
       return;
     }
-    element.removeEventListener(eventName, store(element).getData(`event${eventName}`));
-    store(element).deleteData(`event${eventName}`);
+    element.removeEventListener(eventName, store_default(element).getData(`event${eventName}`));
+    store_default(element).deleteData(`event${eventName}`);
   }
 
+  // src/ts/attribute.ts
   function addAttribute(element, attribute, value) {
     if (element instanceof Array) {
       for (let i = 0; i < element.length; ++i) {
@@ -143,7 +139,8 @@
     element.removeAttribute(attribute);
   }
 
-  const offset = (element) => {
+  // src/ts/offset.ts
+  var offset_default = (element) => {
     if (!element.parentElement || element.getClientRects().length === 0) {
       throw new Error("target element must be part of the dom");
     }
@@ -156,7 +153,8 @@
     };
   };
 
-  const debounce = (func, wait = 0) => {
+  // src/ts/debounce.ts
+  var debounce_default = (func, wait = 0) => {
     let timeout;
     return (...args) => {
       clearTimeout(timeout);
@@ -166,21 +164,24 @@
     };
   };
 
-  const getIndex = (element, elementList) => {
+  // src/ts/getIndex.ts
+  var getIndex_default = (element, elementList) => {
     if (!(element instanceof HTMLElement) || !(elementList instanceof NodeList || elementList instanceof HTMLCollection || elementList instanceof Array)) {
       throw new Error("You must provide an element and a list of elements.");
     }
     return Array.from(elementList).indexOf(element);
   };
 
-  const isInDom = (element) => {
+  // src/ts/isInDom.ts
+  var isInDom_default = (element) => {
     if (!(element instanceof HTMLElement)) {
       throw new Error("Element is not a node element.");
     }
     return element.parentNode !== null;
   };
 
-  const insertNode = (referenceNode, newElement, position) => {
+  // src/ts/insertHtmlElements.ts
+  var insertNode = (referenceNode, newElement, position) => {
     if (!(referenceNode instanceof HTMLElement) || !(referenceNode.parentElement instanceof HTMLElement)) {
       throw new Error("target and element must be a node");
     }
@@ -189,10 +190,11 @@
       position === "before" ? referenceNode : referenceNode.nextElementSibling
     );
   };
-  const insertBefore = (target, element) => insertNode(target, element, "before");
-  const insertAfter = (target, element) => insertNode(target, element, "after");
+  var insertBefore = (target, element) => insertNode(target, element, "before");
+  var insertAfter = (target, element) => insertNode(target, element, "after");
 
-  const serialize = (sortableContainer, customItemSerializer = (serializedItem, sortableContainer2) => serializedItem, customContainerSerializer = (serializedContainer) => serializedContainer) => {
+  // src/ts/serialize.ts
+  var serialize_default = (sortableContainer, customItemSerializer = (serializedItem, sortableContainer2) => serializedItem, customContainerSerializer = (serializedContainer) => serializedContainer) => {
     if (!(sortableContainer instanceof HTMLElement) || !sortableContainer.isSortable === true) {
       throw new Error("You need to provide a sortableContainer to be serialized.");
     }
@@ -201,13 +203,13 @@
     }
     const options = addData(sortableContainer, "opts");
     const item = options.items;
-    const items = filter(sortableContainer.children, item);
+    const items = filter_default(sortableContainer.children, item);
     const serializedItems = items.map((item2) => {
       return {
         parent: sortableContainer,
         node: item2,
         html: item2.outerHTML,
-        index: getIndex(item2, items)
+        index: getIndex_default(item2, items)
       };
     });
     const container = {
@@ -220,7 +222,8 @@
     };
   };
 
-  const makePlaceholder = (sortableElement, placeholder, placeholderClass = "sortable-placeholder") => {
+  // src/ts/makePlaceholder.ts
+  var makePlaceholder_default = (sortableElement, placeholder, placeholderClass = "sortable-placeholder") => {
     if (!(sortableElement instanceof HTMLElement)) {
       throw new Error("You must provide a valid element as a sortable.");
     }
@@ -243,7 +246,8 @@
     return placeholder;
   };
 
-  const getElementHeight = (element) => {
+  // src/ts/elementHeight.ts
+  var elementHeight_default = (element) => {
     if (!(element instanceof HTMLElement)) {
       throw new Error("You must provide a valid dom element");
     }
@@ -257,7 +261,8 @@
     }).reduce((sum, value) => sum + value);
   };
 
-  const getElementWidth = (element) => {
+  // src/ts/elementWidth.ts
+  var elementWidth_default = (element) => {
     if (!(element instanceof HTMLElement)) {
       throw new Error("You must provide a valid dom element");
     }
@@ -268,7 +273,8 @@
     }).reduce((sum, value) => sum + value);
   };
 
-  const getHandles = (items, selector) => {
+  // src/ts/getHandles.ts
+  var getHandles_default = (items, selector) => {
     if (!(items instanceof Array)) {
       throw new Error("You must provide a Array of HTMLElements to be filtered.");
     }
@@ -282,18 +288,20 @@
     });
   };
 
-  const getEventTarget = (event) => {
+  // src/ts/getEventTarget.ts
+  var getEventTarget_default = (event) => {
     return event.composedPath && event.composedPath()[0] || event.target;
   };
 
-  const defaultDragImage = (draggedElement, elementOffset, event) => {
+  // src/ts/setDragImage.ts
+  var defaultDragImage = (draggedElement, elementOffset, event) => {
     return {
       element: draggedElement,
       posX: event.pageX - elementOffset.left,
       posY: event.pageY - elementOffset.top
     };
   };
-  const setDragImage = (event, draggedElement, customDragImage) => {
+  var setDragImage_default = (event, draggedElement, customDragImage) => {
     if (!(event instanceof Event)) {
       throw new Error("setDragImage requires a DragEvent as the first argument.");
     }
@@ -304,20 +312,21 @@
       customDragImage = defaultDragImage;
     }
     if (event.dataTransfer && event.dataTransfer.setDragImage) {
-      const elementOffset = offset(draggedElement);
+      const elementOffset = offset_default(draggedElement);
       const dragImage = customDragImage(draggedElement, elementOffset, event);
       if (!(dragImage.element instanceof HTMLElement) || typeof dragImage.posX !== "number" || typeof dragImage.posY !== "number") {
         throw new Error("The customDragImage function you provided must return and object with the properties element[string], posX[integer], posY[integer].");
       }
       event.dataTransfer.effectAllowed = "copyMove";
-      event.dataTransfer.setData("text/plain", getEventTarget(event).id);
+      event.dataTransfer.setData("text/plain", getEventTarget_default(event).id);
       event.dataTransfer.setDragImage(dragImage.element, dragImage.posX, dragImage.posY);
     }
   };
 
-  const listsConnected = (destination, origin) => {
+  // src/ts/isConnected.ts
+  var isConnected_default = (destination, origin) => {
     if (destination.isSortable === true) {
-      const acceptFrom = store(destination).getConfig("acceptFrom");
+      const acceptFrom = store_default(destination).getConfig("acceptFrom");
       if (acceptFrom !== null && acceptFrom !== false && typeof acceptFrom !== "string") {
         throw new Error('HTML5Sortable: Wrong argument, "acceptFrom" must be "null", "false", or a valid selector string.');
       }
@@ -329,14 +338,15 @@
       if (destination === origin) {
         return true;
       }
-      if (store(destination).getConfig("connectWith") !== void 0 && store(destination).getConfig("connectWith") !== null) {
-        return store(destination).getConfig("connectWith") === store(origin).getConfig("connectWith");
+      if (store_default(destination).getConfig("connectWith") !== void 0 && store_default(destination).getConfig("connectWith") !== null) {
+        return store_default(destination).getConfig("connectWith") === store_default(origin).getConfig("connectWith");
       }
     }
     return false;
   };
 
-  const defaultConfiguration = {
+  // src/ts/defaultConfiguration.ts
+  var defaultConfiguration_default = {
     items: null,
     connectWith: null,
     disableIEFix: null,
@@ -356,7 +366,8 @@
     orientation: "vertical"
   };
 
-  function throttle(fn, threshold = 250) {
+  // src/ts/throttle.ts
+  function throttle_default(fn, threshold = 250) {
     if (typeof fn !== "function") {
       throw new Error("You must provide a function as the first argument for throttle.");
     }
@@ -373,13 +384,14 @@
     };
   }
 
-  const enableHoverClass = (sortableContainer, enable) => {
-    if (typeof store(sortableContainer).getConfig("hoverClass") === "string") {
-      const hoverClasses = store(sortableContainer).getConfig("hoverClass").split(" ");
+  // src/ts/hoverClass.ts
+  var hoverClass_default = (sortableContainer, enable) => {
+    if (typeof store_default(sortableContainer).getConfig("hoverClass") === "string") {
+      const hoverClasses = store_default(sortableContainer).getConfig("hoverClass").split(" ");
       if (enable === true) {
-        addEventListener(sortableContainer, "mousemove", throttle((event) => {
+        addEventListener(sortableContainer, "mousemove", throttle_default((event) => {
           if (event.buttons === 0) {
-            filter(sortableContainer.children, store(sortableContainer).getConfig("items")).forEach((item) => {
+            filter_default(sortableContainer.children, store_default(sortableContainer).getConfig("items")).forEach((item) => {
               if (item === event.target || item.contains(event.target)) {
                 item.classList.add(...hoverClasses);
               } else {
@@ -387,9 +399,9 @@
               }
             });
           }
-        }, store(sortableContainer).getConfig("throttleTime")));
+        }, store_default(sortableContainer).getConfig("throttleTime")));
         addEventListener(sortableContainer, "mouseleave", () => {
-          filter(sortableContainer.children, store(sortableContainer).getConfig("items")).forEach((item) => {
+          filter_default(sortableContainer.children, store_default(sortableContainer).getConfig("items")).forEach((item) => {
             item.classList.remove(...hoverClasses);
           });
         });
@@ -400,16 +412,17 @@
     }
   };
 
-  let dragging;
-  let draggingHeight;
-  let draggingWidth;
-  let originContainer;
-  let originIndex;
-  let originElementIndex;
-  let originItemsBeforeUpdate;
-  let previousContainer;
-  let destinationItemsBeforeUpdate;
-  const removeItemEvents = function(items) {
+  // src/ts/index.ts
+  var dragging;
+  var draggingHeight;
+  var draggingWidth;
+  var originContainer;
+  var originIndex;
+  var originElementIndex;
+  var originItemsBeforeUpdate;
+  var previousContainer;
+  var destinationItemsBeforeUpdate;
+  var removeItemEvents = function(items) {
     removeEventListener(items, "dragstart");
     removeEventListener(items, "dragend");
     removeEventListener(items, "dragover");
@@ -418,7 +431,7 @@
     removeEventListener(items, "mouseenter");
     removeEventListener(items, "mouseleave");
   };
-  const removeContainerEvents = function(originContainer2, previousContainer2) {
+  var removeContainerEvents = function(originContainer2, previousContainer2) {
     if (originContainer2) {
       removeEventListener(originContainer2, "dragleave");
     }
@@ -426,9 +439,9 @@
       removeEventListener(previousContainer2, "dragleave");
     }
   };
-  const getDragging = function(draggedItem, sortable2) {
+  var getDragging = function(draggedItem, sortable2) {
     let ditem = draggedItem;
-    if (store(sortable2).getConfig("copy") === true) {
+    if (store_default(sortable2).getConfig("copy") === true) {
       ditem = draggedItem.cloneNode(true);
       addAttribute(ditem, "aria-copied", "true");
       draggedItem.parentElement.appendChild(ditem);
@@ -437,11 +450,11 @@
     }
     return ditem;
   };
-  const removeSortableData = function(sortable2) {
+  var removeSortableData = function(sortable2) {
     removeData(sortable2);
     removeAttribute(sortable2, "aria-dropeffect");
   };
-  const removeItemData = function(items) {
+  var removeItemData = function(items) {
     removeAttribute(items, "aria-grabbed");
     removeAttribute(items, "aria-copied");
     removeAttribute(items, "draggable");
@@ -458,17 +471,17 @@
   }
   function findDragElement(sortableElement, element) {
     const options = addData(sortableElement, "opts");
-    const items = filter(sortableElement.children, options.items);
+    const items = filter_default(sortableElement.children, options.items);
     const itemlist = items.filter(function(ele) {
       return ele.contains(element) || ele.shadowRoot && ele.shadowRoot.contains(element);
     });
     return itemlist.length > 0 ? itemlist[0] : element;
   }
-  const destroySortable = function(sortableElement) {
+  var destroySortable = function(sortableElement) {
     const opts = addData(sortableElement, "opts") || {};
-    const items = filter(sortableElement.children, opts.items);
-    const handles = getHandles(items, opts.handle);
-    enableHoverClass(sortableElement, false);
+    const items = filter_default(sortableElement.children, opts.items);
+    const handles = getHandles_default(items, opts.handle);
+    hoverClass_default(sortableElement, false);
     removeEventListener(sortableElement, "dragover");
     removeEventListener(sortableElement, "dragenter");
     removeEventListener(sortableElement, "dragstart");
@@ -481,14 +494,14 @@
     removeContainerEvents(originContainer, previousContainer);
     sortableElement.isSortable = false;
   };
-  const enableSortable = function(sortableElement) {
+  var enableSortable = function(sortableElement) {
     const opts = addData(sortableElement, "opts");
-    const items = filter(sortableElement.children, opts.items);
-    const handles = getHandles(items, opts.handle);
+    const items = filter_default(sortableElement.children, opts.items);
+    const handles = getHandles_default(items, opts.handle);
     addAttribute(sortableElement, "aria-dropeffect", "move");
     addData(sortableElement, "_disabled", "false");
     addAttribute(handles, "draggable", "true");
-    enableHoverClass(sortableElement, true);
+    hoverClass_default(sortableElement, true);
     if (opts.disableIEFix === false) {
       const spanEl = (document || window.document).createElement("span");
       if (typeof spanEl.dragDrop === "function") {
@@ -506,20 +519,20 @@
       }
     }
   };
-  const disableSortable = function(sortableElement) {
+  var disableSortable = function(sortableElement) {
     const opts = addData(sortableElement, "opts");
-    const items = filter(sortableElement.children, opts.items);
-    const handles = getHandles(items, opts.handle);
+    const items = filter_default(sortableElement.children, opts.items);
+    const handles = getHandles_default(items, opts.handle);
     addAttribute(sortableElement, "aria-dropeffect", "none");
     addData(sortableElement, "_disabled", "true");
     addAttribute(handles, "draggable", "false");
     removeEventListener(handles, "mousedown");
-    enableHoverClass(sortableElement, false);
+    hoverClass_default(sortableElement, false);
   };
-  const reloadSortable = function(sortableElement) {
+  var reloadSortable = function(sortableElement) {
     const opts = addData(sortableElement, "opts");
-    const items = filter(sortableElement.children, opts.items);
-    const handles = getHandles(items, opts.handle);
+    const items = filter_default(sortableElement.children, opts.items);
+    const handles = getHandles_default(items, opts.handle);
     addData(sortableElement, "_disabled", "false");
     removeItemEvents(items);
     removeContainerEvents(originContainer, previousContainer);
@@ -541,7 +554,7 @@
     if (/serialize/.test(method)) {
       return sortableElements.map((sortableContainer) => {
         const opts = addData(sortableContainer, "opts");
-        return serialize(sortableContainer, opts.itemSerializer, opts.containerSerializer);
+        return serialize_default(sortableContainer, opts.itemSerializer, opts.containerSerializer);
       });
     }
     sortableElements.forEach(function(sortableElement) {
@@ -553,12 +566,12 @@
           console.warn(`HTML5Sortable: You are using the deprecated configuration "${configKey}". This will be removed in an upcoming version, make sure to migrate to the new options when updating.`);
         }
       });
-      options = Object.assign({}, defaultConfiguration, store(sortableElement).config, options);
-      store(sortableElement).config = options;
+      options = Object.assign({}, defaultConfiguration_default, store_default(sortableElement).config, options);
+      store_default(sortableElement).config = options;
       addData(sortableElement, "opts", options);
       sortableElement.isSortable = true;
       reloadSortable(sortableElement);
-      const listItems = filter(sortableElement.children, options.items);
+      const listItems = filter_default(sortableElement.children, options.items);
       let customPlaceholder;
       if (options.placeholder !== null && options.placeholder !== void 0) {
         const tempContainer = document.createElement(sortableElement.tagName);
@@ -569,7 +582,7 @@
         }
         customPlaceholder = tempContainer.children[0];
       }
-      store(sortableElement).placeholder = makePlaceholder(sortableElement, customPlaceholder, options.placeholderClass);
+      store_default(sortableElement).placeholder = makePlaceholder_default(sortableElement, customPlaceholder, options.placeholderClass);
       addData(sortableElement, "items", options.items);
       if (options.acceptFrom) {
         addData(sortableElement, "acceptFrom", options.acceptFrom);
@@ -580,7 +593,7 @@
       addAttribute(listItems, "role", "option");
       addAttribute(listItems, "aria-grabbed", "false");
       addEventListener(sortableElement, "dragstart", function(e) {
-        const target = getEventTarget(e);
+        const target = getEventTarget_default(e);
         if (target.isSortable === true) {
           return;
         }
@@ -590,13 +603,13 @@
         }
         const sortableContainer = findSortable(target, e);
         const dragItem = findDragElement(sortableContainer, target);
-        originItemsBeforeUpdate = filter(sortableContainer.children, options.items);
+        originItemsBeforeUpdate = filter_default(sortableContainer.children, options.items);
         originIndex = originItemsBeforeUpdate.indexOf(dragItem);
-        originElementIndex = getIndex(dragItem, sortableContainer.children);
+        originElementIndex = getIndex_default(dragItem, sortableContainer.children);
         originContainer = sortableContainer;
-        setDragImage(e, dragItem, options.customDragImage);
-        draggingHeight = getElementHeight(dragItem);
-        draggingWidth = getElementWidth(dragItem);
+        setDragImage_default(e, dragItem, options.customDragImage);
+        draggingHeight = elementHeight_default(dragItem);
+        draggingWidth = elementWidth_default(dragItem);
         dragItem.classList.add(options.draggingClass);
         dragging = getDragging(dragItem, sortableContainer);
         addAttribute(dragging, "aria-grabbed", "true");
@@ -614,10 +627,10 @@
         }));
       });
       addEventListener(sortableElement, "dragenter", (e) => {
-        const target = getEventTarget(e);
+        const target = getEventTarget_default(e);
         const sortableContainer = findSortable(target, e);
         if (sortableContainer && sortableContainer !== previousContainer) {
-          destinationItemsBeforeUpdate = filter(sortableContainer.children, addData(sortableContainer, "items")).filter((item) => item !== store(sortableElement).placeholder);
+          destinationItemsBeforeUpdate = filter_default(sortableContainer.children, addData(sortableContainer, "items")).filter((item) => item !== store_default(sortableElement).placeholder);
           if (options.dropTargetContainerClass) {
             sortableContainer.classList.add(options.dropTargetContainerClass);
           }
@@ -671,7 +684,7 @@
           dragging.style.display = dragging.oldDisplay;
           delete dragging.oldDisplay;
         }
-        const visiblePlaceholder = Array.from(stores.values()).map((data2) => data2.placeholder).filter((placeholder) => placeholder instanceof HTMLElement).filter(isInDom)[0];
+        const visiblePlaceholder = Array.from(stores.values()).map((data) => data.placeholder).filter((placeholder) => placeholder instanceof HTMLElement).filter(isInDom_default)[0];
         if (visiblePlaceholder) {
           visiblePlaceholder.remove();
         }
@@ -692,15 +705,15 @@
         draggingWidth = null;
       });
       addEventListener(sortableElement, "drop", function(e) {
-        if (!listsConnected(sortableElement, dragging.parentElement)) {
+        if (!isConnected_default(sortableElement, dragging.parentElement)) {
           return;
         }
         e.preventDefault();
         e.stopPropagation();
         addData(dragging, "dropped", "true");
-        const visiblePlaceholder = Array.from(stores.values()).map((data2) => {
-          return data2.placeholder;
-        }).filter((placeholder2) => placeholder2 instanceof HTMLElement).filter(isInDom)[0];
+        const visiblePlaceholder = Array.from(stores.values()).map((data) => {
+          return data.placeholder;
+        }).filter((placeholder2) => placeholder2 instanceof HTMLElement).filter(isInDom_default)[0];
         if (visiblePlaceholder) {
           visiblePlaceholder.replaceWith(dragging);
           if (dragging.oldDisplay !== void 0) {
@@ -711,12 +724,12 @@
           addData(dragging, "dropped", "false");
           return;
         }
-        const placeholder = store(sortableElement).placeholder;
-        const originItems = filter(originContainer.children, options.items).filter((item) => item !== placeholder);
+        const placeholder = store_default(sortableElement).placeholder;
+        const originItems = filter_default(originContainer.children, options.items).filter((item) => item !== placeholder);
         const destinationContainer = this.isSortable === true ? this : this.parentElement;
-        const destinationItems = filter(destinationContainer.children, addData(destinationContainer, "items")).filter((item) => item !== placeholder);
-        const destinationElementIndex = getIndex(dragging, Array.from(dragging.parentElement.children).filter((item) => item !== placeholder));
-        const destinationIndex = getIndex(dragging, destinationItems);
+        const destinationItems = filter_default(destinationContainer.children, addData(destinationContainer, "items")).filter((item) => item !== placeholder);
+        const destinationElementIndex = getIndex_default(dragging, Array.from(dragging.parentElement.children).filter((item) => item !== placeholder));
+        const destinationIndex = getIndex_default(dragging, destinationItems);
         if (options.dropTargetContainerClass) {
           destinationContainer.classList.remove(options.dropTargetContainerClass);
         }
@@ -761,25 +774,25 @@
           }));
         }
       });
-      const debouncedDragOverEnter = debounce(
+      const debouncedDragOverEnter = debounce_default(
         (sortableElement2, element, pageX, pageY) => {
           if (!dragging) {
             return;
           }
           if (options.forcePlaceholderSize) {
-            store(sortableElement2).placeholder.style.height = draggingHeight + "px";
-            store(sortableElement2).placeholder.style.width = draggingWidth + "px";
+            store_default(sortableElement2).placeholder.style.height = draggingHeight + "px";
+            store_default(sortableElement2).placeholder.style.width = draggingWidth + "px";
           }
           if (Array.from(sortableElement2.children).indexOf(element) > -1) {
-            const thisHeight = getElementHeight(element);
-            const thisWidth = getElementWidth(element);
-            const placeholderIndex = getIndex(store(sortableElement2).placeholder, element.parentElement.children);
-            const thisIndex = getIndex(element, element.parentElement.children);
+            const thisHeight = elementHeight_default(element);
+            const thisWidth = elementWidth_default(element);
+            const placeholderIndex = getIndex_default(store_default(sortableElement2).placeholder, element.parentElement.children);
+            const thisIndex = getIndex_default(element, element.parentElement.children);
             if (thisHeight > draggingHeight || thisWidth > draggingWidth) {
               const deadZoneVertical = thisHeight - draggingHeight;
               const deadZoneHorizontal = thisWidth - draggingWidth;
-              const offsetTop = offset(element).top;
-              const offsetLeft = offset(element).left;
+              const offsetTop = offset_default(element).top;
+              const offsetLeft = offset_default(element).left;
               if (placeholderIndex < thisIndex && (options.orientation === "vertical" && pageY < offsetTop || options.orientation === "horizontal" && pageX < offsetLeft)) {
                 return;
               }
@@ -795,29 +808,29 @@
             }
             let placeAfter = false;
             try {
-              const elementMiddleVertical = offset(element).top + element.offsetHeight / 2;
-              const elementMiddleHorizontal = offset(element).left + element.offsetWidth / 2;
+              const elementMiddleVertical = offset_default(element).top + element.offsetHeight / 2;
+              const elementMiddleHorizontal = offset_default(element).left + element.offsetWidth / 2;
               placeAfter = options.orientation === "vertical" && pageY >= elementMiddleVertical || options.orientation === "horizontal" && pageX >= elementMiddleHorizontal;
             } catch (e) {
               placeAfter = placeholderIndex < thisIndex;
             }
             if (placeAfter) {
-              insertAfter(element, store(sortableElement2).placeholder);
+              insertAfter(element, store_default(sortableElement2).placeholder);
             } else {
-              insertBefore(element, store(sortableElement2).placeholder);
+              insertBefore(element, store_default(sortableElement2).placeholder);
             }
-            Array.from(stores.values()).filter((data2) => data2.placeholder !== void 0).forEach((data2) => {
-              if (data2.placeholder !== store(sortableElement2).placeholder) {
-                data2.placeholder.remove();
+            Array.from(stores.values()).filter((data) => data.placeholder !== void 0).forEach((data) => {
+              if (data.placeholder !== store_default(sortableElement2).placeholder) {
+                data.placeholder.remove();
               }
             });
           } else {
-            const placeholders = Array.from(stores.values()).filter((data2) => data2.placeholder !== void 0).map((data2) => {
-              return data2.placeholder;
+            const placeholders = Array.from(stores.values()).filter((data) => data.placeholder !== void 0).map((data) => {
+              return data.placeholder;
             });
-            if (placeholders.indexOf(element) === -1 && sortableElement2 === element && !filter(element.children, options.items).length) {
+            if (placeholders.indexOf(element) === -1 && sortableElement2 === element && !filter_default(element.children, options.items).length) {
               placeholders.forEach((element2) => element2.remove());
-              element.appendChild(store(sortableElement2).placeholder);
+              element.appendChild(store_default(sortableElement2).placeholder);
             }
           }
         },
@@ -827,16 +840,16 @@
         let element = e.target;
         const sortableElement2 = element.isSortable === true ? element : findSortable(element, e);
         element = findDragElement(sortableElement2, element);
-        if (!dragging || !listsConnected(sortableElement2, dragging.parentElement) || addData(sortableElement2, "_disabled") === "true") {
+        if (!dragging || !isConnected_default(sortableElement2, dragging.parentElement) || addData(sortableElement2, "_disabled") === "true") {
           return;
         }
         const options2 = addData(sortableElement2, "opts");
-        if (parseInt(options2.maxItems) && filter(sortableElement2.children, addData(sortableElement2, "items")).length >= parseInt(options2.maxItems) && dragging.parentElement !== sortableElement2) {
+        if (parseInt(options2.maxItems) && filter_default(sortableElement2.children, addData(sortableElement2, "items")).length >= parseInt(options2.maxItems) && dragging.parentElement !== sortableElement2) {
           return;
         }
         e.preventDefault();
         e.stopPropagation();
-        e.dataTransfer.dropEffect = store(sortableElement2).getConfig("copy") === true ? "copy" : "move";
+        e.dataTransfer.dropEffect = store_default(sortableElement2).getConfig("copy") === true ? "copy" : "move";
         debouncedDragOverEnter(sortableElement2, element, e.pageX, e.pageY);
       };
       addEventListener(listItems.concat(sortableElement), "dragover", onDragOverEnter);
@@ -860,7 +873,4 @@
     removeSortableData,
     removeContainerEvents
   };
-
-  module.exports = sortable;
-
 })();
